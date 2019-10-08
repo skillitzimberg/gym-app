@@ -1,0 +1,7 @@
+section {
+  width: 50%;
+  margin: 30px auto 0;
+}
+mat-form-field {
+  width: 95%;
+}

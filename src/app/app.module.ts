@@ -1,17 +1,22 @@
 // @ANGULAR IMPORTS
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgModule } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
 // APP IMPORTS
-//Root
+// Root
 import { AppComponent } from './app.component';
 
-// Sub-Modules
-import { ActiveSessionComponent } from './training/active-session/active-session.component';
+// APP modules
 import { AppRoutingModule } from './app.routing.module';
-import { LoginComponent } from './auth/login/login.component';
+import { FormsModule } from '@angular/forms';
 import { MaterialModule } from './material.module';
+
+// APP Components
+import { ActiveSessionComponent } from './training/active-session/active-session.component';
+import { LoginComponent } from './auth/login/login.component';
 import { NewSessionComponent } from './training/new-session/new-session.component';
 import { PastSessionsComponent } from './training/past-sessions/past-sessions.component';
 import { SignupComponent } from './auth/signup/signup.component';
@@ -19,8 +24,8 @@ import { TrainingComponent } from './training/training.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 
 @NgModule({
+  // This array declares Components, Pipes, & Directives available for app-wide use
   declarations: [
-    // This array declares Components, Pipes, Directives
     AppComponent,
     ActiveSessionComponent,
     LoginComponent,
@@ -30,12 +35,15 @@ import { WelcomeComponent } from './welcome/welcome.component';
     TrainingComponent,
     WelcomeComponent,
   ],
+  // This array imports modules only
   imports: [
-    // This array imports modules only
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
-    MaterialModule
+    FlexLayoutModule,
+    FormsModule,
+    MaterialModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

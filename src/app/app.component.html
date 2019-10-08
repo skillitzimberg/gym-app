@@ -1,1 +1,7 @@
-<router-outlet></router-outlet>
+<mat-toolbar (click)="sideNav.toggle()">Red Zone</mat-toolbar>
+<mat-sidenav-container>
+  <mat-sidenav #sideNav role="navigation">Menu</mat-sidenav>
+  <mat-sidenav-content>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+</mat-sidenav-container>

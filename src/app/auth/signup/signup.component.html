@@ -1,10 +1,51 @@
 <section>
-  <form>
+  <form 
+    class="signup-form" 
+    fxLayout="column" 
+    fxLayoutGap="20px" 
+    fxLayoutAlign="center center" 
+    #form="ngForm" 
+    (ngSubmit)="onSubmit(form)"
+  >
     <mat-form-field>
-      <input type="email" matInput placeholder="Enter your email address">
+      <input 
+        matInput 
+        ngModel 
+        email required
+        name="email"
+        type="email" 
+        placeholder="Enter your email address"
+        #emailInput="ngModel"
+      >
+      <mat-error *ngIf="emailInput.hasError('required') || !emailInput.hasError('required')">Please enter a valid email address</mat-error>
     </mat-form-field>
-    <mat-form-field>
-      <input type="password" matInput placeholder="Enter your password">
+    <mat-form-field hintLabel="The minimum password length is 8 characters.">
+      <input 
+        matInput 
+        ngModel 
+        password required
+        minlength="8"
+        name="password"
+        type="password" 
+        placeholder="Enter your password" 
+        #charCount="ngModel"
+      >
+      <mat-hint align="end">{{ charCount.value?.length }} / 8</mat-hint>
     </mat-form-field>
+    <mat-checkbox
+      ngModel
+      name="agreeToTerms"
+      required
+    >
+      Accept term of service
+    </mat-checkbox>
+    <button 
+      mat-raised-button
+      type="submit" 
+      color="primary"
+      [disabled]="form.invalid"
+    >
+      Sign Up
+    </button>
   </form>
 </section>
