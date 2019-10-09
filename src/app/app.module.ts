@@ -22,6 +22,8 @@ import { PastSessionsComponent } from './training/past-sessions/past-sessions.co
 import { SignupComponent } from './auth/signup/signup.component';
 import { TrainingComponent } from './training/training.component';
 import { WelcomeComponent } from './welcome/welcome.component';
+import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
+import { HeaderComponent } from './navigation/header/header.component';
 
 @NgModule({
   // This array declares Components, Pipes, & Directives available for app-wide use
@@ -34,6 +36,8 @@ import { WelcomeComponent } from './welcome/welcome.component';
     SignupComponent,
     TrainingComponent,
     WelcomeComponent,
+    SidenavListComponent,
+    HeaderComponent,
   ],
   // This array imports modules only
   imports: [
