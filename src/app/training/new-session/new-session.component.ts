@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-new-session',
@@ -6,10 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./new-session.component.css']
 })
 export class NewSessionComponent implements OnInit {
-
+  @Output() sessionStarted = new EventEmitter<void>();
   constructor() { }
 
   ngOnInit() {
   }
 
+  startSession() {
+    this.sessionStarted.emit();
+  }
 }

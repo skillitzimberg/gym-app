@@ -6,10 +6,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./training.component.css']
 })
 export class TrainingComponent implements OnInit {
-
+  sessionInProgress = false;
   constructor() { }
 
   ngOnInit() {
   }
-
+  onStartSession() {
+    this.sessionInProgress = !this.sessionInProgress;
+  }
 }
