@@ -1,7 +1,14 @@
-<mat-toolbar (click)="sideNav.toggle()">Red Zone</mat-toolbar>
+<app-header (toggleSidenav)="sidenav.toggle()"></app-header>
+
 <mat-sidenav-container>
-  <mat-sidenav #sideNav role="navigation">Menu</mat-sidenav>
+  <mat-sidenav #sidenav role="navigation">
+    <app-sidenav-list (closeSidenav)="sidenav.close()"></app-sidenav-list>
+    <hr>
+  </mat-sidenav>
+
   <mat-sidenav-content>
-    <router-outlet></router-outlet>
+    <main>
+      <router-outlet></router-outlet>
+    </main>
   </mat-sidenav-content>
 </mat-sidenav-container>

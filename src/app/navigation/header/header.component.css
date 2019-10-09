@@ -1,0 +1,19 @@
+.logo {
+  margin: 0 20px;
+}
+.logo a, .top-nav a {
+  color: #fff;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #555;
+}
+
+#menu {
+  margin: 0;
+}
+
+.top-nav {
+  list-style: none;
+}
