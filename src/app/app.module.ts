@@ -30,7 +30,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { AuthService } from './auth/auth.service';
 
 @NgModule({
-  // This array declares Components, Pipes, & Directives available for app-wide use
+  // This array declares Components, Pipes, & Directives available for app-wide use. (I do not understand this yet.)
   declarations: [
     AppComponent,
     ActiveSessionComponent,
@@ -44,7 +44,7 @@ import { AuthService } from './auth/auth.service';
     TrainingComponent,
     WelcomeComponent,
   ],
-  // This array imports modules only
+  // This array imports modules only. (I do not understand this yet.)
   imports: [
     AppRoutingModule,
     BrowserAnimationsModule,
@@ -55,10 +55,12 @@ import { AuthService } from './auth/auth.service';
     MaterialModule,
     ReactiveFormsModule
   ],
+  // Providers listed here are instantiated on App start up. These provider instances are then used over the course of the app's life.
   providers: [AuthService],
+  bootstrap: [AppComponent],
+  // Entry components are components not instantiated by using a selector in a template or by routing. Angular therefore needs to be prepared to instantiate them when needed. This list is where the framework looks for those components. (I do not understand this yet.)
   entryComponents: [
     EndSessionComponent
   ],
-  bootstrap: [AppComponent]
 })
 export class AppModule { }

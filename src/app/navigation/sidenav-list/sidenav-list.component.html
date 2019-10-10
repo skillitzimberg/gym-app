@@ -1,6 +1,6 @@
 <mat-nav-list>
-  <a mat-list-item routerLink="/signup" (click)="onClose()">signup</a>
-  <a mat-list-item routerLink="/login" (click)="onClose()">login</a>
-  <a mat-list-item routerLink="/training" (click)="onClose()">training</a>
-  <a mat-list-item routerLink="/" (click)="onClose()">log out</a>
+  <a mat-list-item routerLink="/signup" (click)="onClose()" *ngIf="!isAuth">signup</a>
+  <a mat-list-item routerLink="/login" (click)="onClose()" *ngIf="!isAuth">login</a>
+  <a mat-list-item routerLink="/training" (click)="onClose()" *ngIf="isAuth">training</a>
+  <a mat-list-item routerLink="/" (click)="onLogout()" *ngIf="isAuth">log out</a>
 </mat-nav-list>
