@@ -1,4 +1,11 @@
-<section>
-    <mat-progress-bar mode="determinate" [value]="sessionProgress"></mat-progress-bar>
-    <button mat-raised-button (click)="stopStartSession()">Stop</button>
+<section id="sessionDisplay" fxLayout="column" fxLayoutAlign="center center">
+    <mat-progress-spinner mode="determinate" [value]="sessionProgress"></mat-progress-spinner>
+    <span id="sessionControls" fxLayout="row" fxLayoutGap="10px">
+      <button mat-raised-button (click)="startOrResumeSession()"><mat-icon>pause</mat-icon></button>
+      <button mat-raised-button><mat-icon>play_arrow</mat-icon></button>
+      <button mat-raised-button (click)="confirmSessionExit()"><mat-icon>stop</mat-icon></button>
+    </span>
+    <button mat-raised-button>Log Session</button>
+    
+    <h1>{{ displayProgress }}%</h1>
 </section>
