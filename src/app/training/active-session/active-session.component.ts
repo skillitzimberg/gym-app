@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatDialog } from "@angular/material";
 import { EndSessionComponent } from './end-session.component';
+import { ExerciseService } from '../exercise.service';
 
 @Component({
   selector: 'app-active-session',
@@ -13,20 +14,22 @@ export class ActiveSessionComponent implements OnInit {
   displayProgress: number;
   timer: any;
   @Output() exitSession = new EventEmitter();
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog, private exerciseService: ExerciseService) { }
   
   ngOnInit() {
     this.startOrResumeSession();
   }
   
   startOrResumeSession() {
+    const step = this.exerciseService.getcurrentSession().duration / 100 * 1000;
     this.timer = setInterval(() => {
-      this.sessionProgress = this.sessionProgress + 5;
+      this.sessionProgress = this.sessionProgress + 1;
       this.displayProgress = Math.round(this.sessionProgress);
-      if(this.displayProgress >= 100) {
+      if(this.sessionProgress >= 100) {
+        this.exerciseService.completeSession();
         clearInterval(this.timer);
       }
-    }, 1000);
+    }, step);
   };
 
   confirmSessionExit() {
@@ -38,7 +41,7 @@ export class ActiveSessionComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(result => {
       if(result) {
-        this.exitSession.emit();
+        this.exerciseService.cancelSession(this.sessionProgress);
       } else {
         this.startOrResumeSession();
       }

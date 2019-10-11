@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { ExerciseService } from './exercise.service';
 
 @Component({
   selector: 'app-training',
@@ -7,10 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TrainingComponent implements OnInit {
   sessionInProgress = false;
-  constructor() { }
+  exerciseSubscription: Subscription;
+ 
+  constructor(private exerciseService: ExerciseService) { }
 
   ngOnInit() {
+    this.exerciseSubscription = this.exerciseService.sessionChangeRequested.subscribe(exercise => {
+      if(exercise) {
+        this.sessionInProgress = true;
+      } else {
+        this.sessionInProgress = false;
+      }
+    });
   }
+
   onStartSession() {
     this.sessionInProgress = !this.sessionInProgress;
   }

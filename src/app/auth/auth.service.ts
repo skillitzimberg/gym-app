@@ -6,8 +6,10 @@ import { AuthData } from './auth-data.model';
 
 @Injectable()
 export class AuthService {
-  authChange = new Subject<boolean>();
   private user: User;
+  
+  // Subject<T> extends Observable<T> implements SubscriptionLike
+  authChange = new Subject<boolean>();
 
   constructor(private router: Router) {}
 
