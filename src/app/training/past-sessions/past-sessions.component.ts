@@ -1,8 +1,10 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatTableDataSource, MatSort } from '@angular/material';
+import { Subscription } from 'rxjs';
+import 'rxjs/add/operator/map';
 
-import { Exercise } from '../exercise.model';
-import { ExerciseService } from '../exercise.service';
+import { Exercise } from '../../models/exercise.model';
+import { ExerciseService } from '../../services/exercise.service';
 
 @Component({
   selector: 'app-past-sessions',
@@ -17,17 +19,27 @@ export class PastSessionsComponent implements OnInit, AfterViewInit {
     'calories',
     'state',
   ];
+  pastSessionSubscription: Subscription;
   dataSource = new MatTableDataSource<Exercise>();
 
   @ViewChild(MatSort, null) sort: MatSort;
-  constructor(private exerciseService: ExerciseService) { }
+  constructor(
+    private exerciseService: ExerciseService
+  ) { }
 
   ngOnInit() {
-    this.dataSource.data = this.exerciseService.getPastSessions();
+    this.exerciseService.fetchPastSessions();
+    this.pastSessionSubscription = this.exerciseService.pastSessionRepoChanged.subscribe((pastSessions: Exercise[]) => {
+      this.dataSource.data = pastSessions;
+    });
   }
 
   ngAfterViewInit() {
     this.dataSource.sort = this.sort;
+  }
+
+  ngOnDestroy(): void {
+    this.pastSessionSubscription.unsubscribe();
   }
 
 }

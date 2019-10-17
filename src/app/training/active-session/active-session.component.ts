@@ -1,7 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatDialog } from "@angular/material";
 import { EndSessionComponent } from './end-session.component';
-import { ExerciseService } from '../exercise.service';
+import { ExerciseService } from '../../services/exercise.service';
 
 @Component({
   selector: 'app-active-session',
