@@ -1,5 +1,6 @@
 // IMPORTS FROM @ANGULAR
 import { AngularFireModule } from '@angular/fire';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -30,7 +31,7 @@ import { WelcomeComponent } from './welcome/welcome.component';
 import { environment } from '../environments/environment';
 // APP Services
 import { AuthService } from './auth/auth.service';
-import { ExerciseService } from './training/exercise.service';
+import { ExerciseService } from './services/exercise.service';
 
 @NgModule({
   // This array declares Components, Pipes, & Directives available for app-wide use. (I do not understand this yet.)
@@ -50,6 +51,7 @@ import { ExerciseService } from './training/exercise.service';
   // This array imports modules only. (I do not understand this yet.)
   imports: [
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
