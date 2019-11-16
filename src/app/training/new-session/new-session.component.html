@@ -1,18 +1,22 @@
 <section fxLayout fxLayoutAlign="center">
   <form (ngSubmit)="onStartSession(form)" #form="ngForm">
-    <mat-card fxFlex.xs="100%" fxFlex="80%">
-      <mat-card-title fxLayoutAlign="center">Create a new session</mat-card-title>
+    <mat-card fxFlex.xs="100%" fxFlex>
+      <mat-card-title fxLayoutAlign="center">Get moving!</mat-card-title>
       <mat-card-content>
-        <mat-form-field fxLayoutAlign="center">
+        <mat-form-field fxLayoutAlign="center" *ngIf='!isLoading && exercises'>
           <mat-label>Select an exercise</mat-label>
           <mat-select ngModel name="exercise" required>
             <mat-option *ngFor="let exercise of exercises" [value]="exercise">{{ exercise.name }}</mat-option>
           </mat-select>
         </mat-form-field>
+        <mat-spinner *ngIf='isLoading'></mat-spinner>
       </mat-card-content>
-      <mat-card-actions fxLayoutAlign="center">
-        <button type="submit" mat-button [disabled]="form.invalid">
+      <mat-card-actions fxLayoutAlign="center" *ngIf='!isLoading'>
+        <button type="submit" mat-button [disabled]="form.invalid" *ngIf='exercises'>
           Start
+        </button>
+        <button type="button" (click)="fetchExercises()" mat-button *ngIf='!exercises'>
+          Retry . . .
         </button>
       </mat-card-actions>
     </mat-card>

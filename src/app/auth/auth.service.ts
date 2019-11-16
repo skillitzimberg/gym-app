@@ -1,51 +1,90 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
 import { Subject } from 'rxjs';
-import { User } from './user.model';
+import { Store } from '@ngrx/store';
+
 import { AuthData } from './auth-data.model';
+import { ExerciseService } from '../services/exercise.service';
+import * as fromApp from '../app.reducer'
+import { UIService } from '../shared/ui.service';
 
 @Injectable()
 export class AuthService {
-  private user: User;
+  private isAuthenticated: boolean = false;
   
   // Subject<T> extends Observable<T> implements SubscriptionLike
   authChange = new Subject<boolean>();
 
-  constructor(private router: Router) {}
+  constructor( 
+    private afAuth: AngularFireAuth, 
+    private exerciseService: ExerciseService,
+    private router: Router,
+    private uiService: UIService,
+    private store: Store<{ ui: fromApp.State }>
+  ) {}
+
+  initAuthListener() {
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        this.isAuthenticated = true;
+        this.authChange.next(true);
+        this.router.navigate(['/training']);
+      } else {
+        this.exerciseService.cancelSubscriptions();
+        this.authChange.next(false);
+        this.router.navigate(['/login']);
+        this.isAuthenticated = false;
+      }
+    });
+  }
 
   registerUser(authData: AuthData): void {
-    this.user = {
-      email: authData.email,
-      userID: Math.round(Math.random() * 10000).toString()
-    };
-    this.routeByAuthChange(this.isAuth(), '/training');
+    // this.uiService.loadingStateChanged.next(true);
+    this.store.dispatch({ type: 'START_LOADING'});
+    this.afAuth.auth.createUserWithEmailAndPassword(
+      authData.email,
+      authData.password
+    )
+    .then(result => {
+      console.log(result);
+      // this.uiService.loadingStateChanged.next(false);
+      this.store.dispatch({ type: 'STOP_LOADING'});
+  })
+    .catch(err => {
+      console.log(err);
+      // this.uiService.loadingStateChanged.next(false);
+      this.store.dispatch({ type: 'STOP_LOADING'});
+      this.uiService.showSnackBar(err.message, null, 3000);
+    });
   }
 
   login(authData: AuthData): void {
-    this.user = {
-      email: authData.email,
-      userID: Math.round(Math.random() * 10000).toString()
-    };
-    this.routeByAuthChange(this.isAuth(), '/training');
+    // this.uiService.loadingStateChanged.next(true);
+    this.store.dispatch({ type: 'START_LOADING'});
+    this.afAuth.auth.signInWithEmailAndPassword(
+      authData.email,
+      authData.password
+    )
+    .then(result => {
+      console.log(result);
+      // this.uiService.loadingStateChanged.next(false);
+      this.store.dispatch({ type: 'STOP_LOADING'});
+  })
+    .catch(err => {
+      console.log(err);
+      this.uiService.loadingStateChanged.next(false);
+      this.store.dispatch({ type: 'STOP_LOADING'});
+      this.uiService.showSnackBar(err.message, null, 3000)
+    });
   }
 
   logout(): void {
-    this.user = null;
-    this.routeByAuthChange(this.isAuth(), '/login');
+    this.afAuth.auth.signOut();
   }
 
-  // creates a shallow copy of this.user to prevent other classes/methods from altering the original user.
-  getUser(): User {
-    return { ...this.user };
-  }
-
-  // Convenience method - if user is null isAuth returns false (user is not logged in); if user is not null isAuth returns true (user is logged in).
+  // Convenience method - returns the current state of isAuthenticated.
   isAuth(): boolean {
-    return this.user != null;
-  }
-
-  private routeByAuthChange(isAuth: boolean, route: string): void {
-    this.authChange.next(isAuth);
-    this.router.navigate([route]);
+    return this.isAuthenticated;
   }
 }

@@ -35,7 +35,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   // Implements the OnDestroy lifecycle hook interface.
   ngOnDestroy() {
-    this.authSubscription.unsubscribe();
+    if(this.authSubscription) {
+      this.authSubscription.unsubscribe();
+    }
   }
 
 }

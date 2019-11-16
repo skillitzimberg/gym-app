@@ -5,6 +5,7 @@ import 'rxjs/add/operator/map';
 
 import { ExerciseService } from '../../services/exercise.service';
 import { Exercise } from '../../models/exercise.model';
+import { UIService } from 'src/app/shared/ui.service';
 
 @Component({
   selector: 'app-new-session',
@@ -13,14 +14,22 @@ import { Exercise } from '../../models/exercise.model';
 })
 @Injectable()
 export class NewSessionComponent implements OnInit, OnDestroy {
-  exerciseSubscription: Subscription;
   exercises: Exercise[];
+  private exerciseSubscription: Subscription;
+
+  isLoading: boolean = true;
+  private loadingSubscription: Subscription;
+
   constructor(
-    private exerciseService: ExerciseService
+    private exerciseService: ExerciseService,
+    private uiService: UIService
   ) { };
 
   ngOnInit() {
-    this.exerciseService.fetchExerciseRepository();
+    this.loadingSubscription = this.uiService.loadingStateChanged.subscribe(
+      isLoading => this.isLoading = isLoading
+    );
+    this.fetchExercises();
     this.exerciseSubscription = this.exerciseService.exerciseRepoChanged.subscribe(exercises => {
       this.exercises = exercises;
     });
@@ -30,7 +39,17 @@ export class NewSessionComponent implements OnInit, OnDestroy {
     this.exerciseService.startSession(form.value.exercise);
   }
 
+  fetchExercises() {
+    this.exerciseService.fetchExerciseRepository();
+  }
+
   ngOnDestroy() {
-    this.exerciseSubscription.unsubscribe();
+    if(this.exerciseSubscription) {
+     this.exerciseSubscription.unsubscribe();
+    }
+
+    if(this.loadingSubscription) {
+      this.loadingSubscription.unsubscribe();
+    }
   }
 }

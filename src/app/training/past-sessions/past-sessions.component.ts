@@ -11,7 +11,7 @@ import { ExerciseService } from '../../services/exercise.service';
   templateUrl: './past-sessions.component.html',
   styleUrls: ['./past-sessions.component.css']
 })
-export class PastSessionsComponent implements OnInit, AfterViewInit {
+export class PastSessionsComponent implements OnInit, OnDestroy, AfterViewInit {
   displayedColumns = [
     'date',
     'name',
@@ -39,7 +39,8 @@ export class PastSessionsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnDestroy(): void {
-    this.pastSessionSubscription.unsubscribe();
+    if(this.pastSessionSubscription) {
+      this.pastSessionSubscription.unsubscribe();
+    }
   }
-
 }

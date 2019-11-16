@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 import { Exercise } from '../models/exercise.model';
+import { UIService } from '../shared/ui.service';
 
 @Injectable()
 export class ExerciseService {
@@ -15,9 +16,14 @@ export class ExerciseService {
   pastSessionRepoChanged = new Subject<Exercise[]>();
   private pastSessions: Exercise[] = [];
   
-  constructor( private db: AngularFirestore ) {}
+  private fbSubscriptions: Subscription[] = [];
 
-  private retrieveSelectedCollection(collection: string) {
+  constructor( 
+    private db: AngularFirestore,
+    private uiService: UIService
+  ) {}
+
+  private retrieveCollection(collection: string) {
     return this.db.collection(collection)
     .snapshotChanges()
     .map(docArray => {
@@ -31,18 +37,33 @@ export class ExerciseService {
   }
   
   fetchExerciseRepository() {
-    this.retrieveSelectedCollection('exerciseRepository')
+    this.uiService.loadingStateChanged.next(true);
+    this.fbSubscriptions.push(this.retrieveCollection('exerciseRepository')
     .subscribe((repo: Exercise[]) => {
+      this.uiService.loadingStateChanged.next(false);
       this.exerciseRepository = repo;
       this.exerciseRepoChanged.next([...this.exerciseRepository]);
-    });
+    },
+    (error: Error) => {
+      if(error) {
+        this.uiService.loadingStateChanged.next(false);
+        this.uiService.showSnackBar('Exercise service is not able to fetch exercises.', null, 3000)
+      }
+    }));
   }
 
   fetchPastSessions() {
-    this.retrieveSelectedCollection('pastSession')
+    this.uiService.loadingStateChanged.next(true);
+    this.fbSubscriptions.push(this.retrieveCollection('pastSession')
     .subscribe((repo: Exercise[]) => {
       this.pastSessionRepoChanged.next(repo);
-    });
+    },
+    (error: Error) => {
+      if(error) {
+        this.uiService.loadingStateChanged.next(false);
+        this.uiService.showSnackBar('Exercise service is not able to past sessions.', null, 3000)
+      }
+    }));
   }
 
   startSession(selectedExercise: Exercise) {
@@ -85,5 +106,9 @@ export class ExerciseService {
 
   private addSessionToDatabase(exercise: Exercise) {
     this.db.collection('pastSession').add(exercise);
+  }
+
+  cancelSubscriptions() {
+    this.fbSubscriptions.forEach(sub => sub.unsubscribe())
   }
 }

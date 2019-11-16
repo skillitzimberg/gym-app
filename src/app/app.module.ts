@@ -1,75 +1,59 @@
 // IMPORTS FROM @ANGULAR
 import { AngularFireModule } from '@angular/fire';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatDialogModule } from '@angular/material/dialog';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { StoreModule } from '@ngrx/store';
+import { RouterModule } from '@angular/router';
 
 // IMPORTS FROM APP
-// APP modules
+// Modules
 import { AppRoutingModule } from './app.routing.module';
-import { FormsModule } from '@angular/forms';
-import { MaterialModule } from './material.module';
+import { AuthModule } from './auth/auth.module';
 
-// APP Components
+// Components
 import { AppComponent } from './app.component'; // Root
-
-import { ActiveSessionComponent } from './training/active-session/active-session.component';
-import { EndSessionComponent } from './training/active-session/end-session.component';
 import { HeaderComponent } from './navigation/header/header.component';
-import { LoginComponent } from './auth/login/login.component';
-import { NewSessionComponent } from './training/new-session/new-session.component';
-import { PastSessionsComponent } from './training/past-sessions/past-sessions.component';
 import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
-import { SignupComponent } from './auth/signup/signup.component';
-import { TrainingComponent } from './training/training.component';
 import { WelcomeComponent } from './welcome/welcome.component';
 
+// Config
 import { environment } from '../environments/environment';
-// APP Services
+
+// Services
 import { AuthService } from './auth/auth.service';
 import { ExerciseService } from './services/exercise.service';
+import { SharedModule } from './shared/shared.module';
+import { UIService } from './shared/ui.service';
+
+// Reducers
+import { appReducer } from './app.reducer';
 
 @NgModule({
-  // This array declares Components, Pipes, & Directives available for app-wide use. (I do not understand this yet.)
   declarations: [
-    ActiveSessionComponent,
     AppComponent,
-    EndSessionComponent,
     HeaderComponent,
-    LoginComponent,
-    NewSessionComponent,
-    PastSessionsComponent,
     SidenavListComponent,
-    SignupComponent,
-    TrainingComponent,
-    WelcomeComponent,
+    WelcomeComponent
   ],
-  // This array imports modules only. (I do not understand this yet.)
   imports: [
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirestoreModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
+    AuthModule,
     BrowserModule,
-    FlexLayoutModule,
-    FormsModule,
-    MatDialogModule,
-    MaterialModule,
-    ReactiveFormsModule
+    BrowserAnimationsModule,
+    RouterModule,
+    SharedModule,
+    StoreModule.forRoot({
+      ui: appReducer
+    })
   ],
-  // Providers listed here are instantiated on App start up. These provider instances are then used over the course of the app's life.
   providers: [
     AuthService, 
-    ExerciseService
+    ExerciseService,
+    UIService,
   ],
   bootstrap: [AppComponent],
-  // Entry components are components not instantiated by using a selector in a template or by routing. Angular therefore needs to be prepared to instantiate them when needed. This list is where the framework looks for those components. (I do not understand this yet.)
-  entryComponents: [
-    EndSessionComponent
-  ],
+
 })
 export class AppModule { }
