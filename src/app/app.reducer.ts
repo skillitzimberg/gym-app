@@ -1,9 +1,7 @@
+import { Action } from '@ngrx/store';
+
 export interface State {
   isLoading: boolean
-}
-
-export interface Action {
-  type: string
 }
 
 const initialState: State = {
