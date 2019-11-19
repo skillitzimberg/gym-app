@@ -33,10 +33,10 @@
       type="submit" 
       color="primary"
       [disabled]="loginForm.invalid"
-      *ngIf='!(isLoading$ | async)'
+      *ngIf='!(getIsLoading$ | async)'
     >
       Sign In
     </button>
-    <mat-spinner *ngIf='(isLoading$ | async)'></mat-spinner>
+    <mat-spinner *ngIf='(getIsLoading$ | async)'></mat-spinner>
   </form>
 </section>
