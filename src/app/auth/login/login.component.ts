@@ -6,7 +6,7 @@ import {
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { Subscription, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import 'rxjs/add/operator/map';
 
 import { AuthService } from '../auth.service';
 import { UIService } from 'src/app/shared/ui.service';
