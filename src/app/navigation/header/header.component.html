@@ -1,15 +1,20 @@
   <mat-toolbar color="accent">
   <div id="menu" fxHide.gt-xs>
-    <mat-icon aria-hidden="false" aria-label="Menu icon" (click)="onToggleSidenav()">menu</mat-icon>
+    <mat-icon 
+      aria-hidden="false" 
+      aria-label="Menu icon" 
+      (click)="onToggleSidenav()"
+    >menu</mat-icon>
   </div>
   <div class="logo">
     <a routerLink="/">Red Zone</a>
   </div>
   <div fxFlex fxLayout fxLayoutAlign="flex-end" fxHide.xs>
     <ul class="top-nav" fxLayout fxLayoutGap="15px">
-      <li><a routerLink="/signup">signup</a></li>
-      <li><a routerLink="/login">login</a></li>
-      <li><a routerLink="/training">training</a></li>
+      <li *ngIf="!isAuth"><a routerLink="/signup">signup</a></li>
+      <li *ngIf="!isAuth"><a routerLink="/login">login</a></li>
+      <li *ngIf="isAuth"><a routerLink="/training">training</a></li>
+      <li *ngIf="isAuth" (click)="onLogout()"><a routerLink="/login">logout</a></li>
     </ul>
   </div>
 </mat-toolbar>

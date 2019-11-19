@@ -1,55 +1,59 @@
-// @ANGULAR IMPORTS
+// IMPORTS FROM @ANGULAR
+import { AngularFireModule } from '@angular/fire';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgModule } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { StoreModule } from '@ngrx/store';
+import { RouterModule } from '@angular/router';
 
-// APP IMPORTS
-// Root
-import { AppComponent } from './app.component';
-
-// APP modules
+// IMPORTS FROM APP
+// Modules
 import { AppRoutingModule } from './app.routing.module';
-import { FormsModule } from '@angular/forms';
-import { MaterialModule } from './material.module';
+import { AuthModule } from './auth/auth.module';
 
-// APP Components
-import { ActiveSessionComponent } from './training/active-session/active-session.component';
-import { LoginComponent } from './auth/login/login.component';
-import { NewSessionComponent } from './training/new-session/new-session.component';
-import { PastSessionsComponent } from './training/past-sessions/past-sessions.component';
-import { SignupComponent } from './auth/signup/signup.component';
-import { TrainingComponent } from './training/training.component';
-import { WelcomeComponent } from './welcome/welcome.component';
-import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
+// Components
+import { AppComponent } from './app.component'; // Root
 import { HeaderComponent } from './navigation/header/header.component';
+import { SidenavListComponent } from './navigation/sidenav-list/sidenav-list.component';
+import { WelcomeComponent } from './welcome/welcome.component';
+
+// Config
+import { environment } from '../environments/environment';
+
+// Services
+import { AuthService } from './auth/auth.service';
+import { ExerciseService } from './services/exercise.service';
+import { SharedModule } from './shared/shared.module';
+import { UIService } from './shared/ui.service';
+
+// Reducers
+import { appReducer } from './app.reducer';
 
 @NgModule({
-  // This array declares Components, Pipes, & Directives available for app-wide use
   declarations: [
     AppComponent,
-    ActiveSessionComponent,
-    LoginComponent,
-    NewSessionComponent,
-    PastSessionsComponent,
-    SignupComponent,
-    TrainingComponent,
-    WelcomeComponent,
-    SidenavListComponent,
     HeaderComponent,
+    SidenavListComponent,
+    WelcomeComponent
   ],
-  // This array imports modules only
   imports: [
+    AngularFireModule.initializeApp(environment.firebase),
     AppRoutingModule,
-    BrowserAnimationsModule,
+    AuthModule,
     BrowserModule,
-    FlexLayoutModule,
-    FormsModule,
-    MaterialModule,
-    ReactiveFormsModule
+    BrowserAnimationsModule,
+    RouterModule,
+    SharedModule,
+    StoreModule.forRoot({
+      ui: appReducer
+    })
   ],
-  providers: [],
-  bootstrap: [AppComponent]
+  providers: [
+    AuthService, 
+    ExerciseService,
+    UIService,
+  ],
+  bootstrap: [AppComponent],
+
 })
 export class AppModule { }

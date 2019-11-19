@@ -44,8 +44,10 @@
       type="submit" 
       color="primary"
       [disabled]="form.invalid"
+      *ngIf='!isLoading'
     >
       Sign Up
     </button>
+    <mat-spinner *ngIf='isLoading'></mat-spinner>
   </form>
 </section>
