@@ -27,7 +27,7 @@ import { SharedModule } from './shared/shared.module';
 import { UIService } from './shared/ui.service';
 
 // Reducers
-import { appReducer } from './app.reducer';
+import { reducers } from './app.reducer';
 
 @NgModule({
   declarations: [
@@ -44,9 +44,7 @@ import { appReducer } from './app.reducer';
     BrowserAnimationsModule,
     RouterModule,
     SharedModule,
-    StoreModule.forRoot({
-      ui: appReducer
-    })
+    StoreModule.forRoot(reducers)
   ],
   providers: [
     AuthService, 

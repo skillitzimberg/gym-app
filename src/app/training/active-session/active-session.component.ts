@@ -1,7 +1,11 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { MatDialog } from "@angular/material";
+import { take } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+
 import { EndSessionComponent } from './end-session.component';
 import { ExerciseService } from '../../services/exercise.service';
+import * as fromTraining from '../training.reducer';
 
 @Component({
   selector: 'app-active-session',
@@ -9,27 +13,32 @@ import { ExerciseService } from '../../services/exercise.service';
   styleUrls: ['./active-session.component.css']
 })
 export class ActiveSessionComponent implements OnInit {
-  inSession: boolean = false;
   sessionProgress: number = 0;
   displayProgress: number;
   timer: any;
   @Output() exitSession = new EventEmitter();
-  constructor(private dialog: MatDialog, private exerciseService: ExerciseService) { }
+  constructor(
+    private dialog: MatDialog, 
+    private exerciseService: ExerciseService,
+    private store: Store<fromTraining.State>
+  ) { }
   
   ngOnInit() {
     this.startOrResumeSession();
   }
   
   startOrResumeSession() {
-    const step = this.exerciseService.getcurrentSession().duration / 100 * 1000;
-    this.timer = setInterval(() => {
-      this.sessionProgress = this.sessionProgress + 1;
-      this.displayProgress = Math.round(this.sessionProgress);
-      if(this.sessionProgress >= 100) {
-        this.exerciseService.completeSession();
-        clearInterval(this.timer);
-      }
-    }, step);
+    this.store.select(fromTraining.getCurrentExercise).pipe(take(1)).subscribe( ex => {
+      const step = ex.duration / 100 * 1000;
+      this.timer = setInterval(() => {
+        this.sessionProgress = this.sessionProgress + 1;
+        this.displayProgress = Math.round(this.sessionProgress);
+        if(this.sessionProgress >= 100) {
+          this.exerciseService.completeSession();
+          clearInterval(this.timer);
+        }
+      }, step);
+    })
   };
 
   confirmSessionExit() {

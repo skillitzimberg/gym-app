@@ -1,4 +1,4 @@
-<mat-tab-group *ngIf="!sessionInProgress">
+<mat-tab-group *ngIf="!(sessionInProgress$ | async)">
   <mat-tab label="New Session">
     <app-new-session></app-new-session>
   </mat-tab>
@@ -8,4 +8,4 @@
   </mat-tab>
 </mat-tab-group>
 
-<app-active-session *ngIf="sessionInProgress"></app-active-session>
+<app-active-session *ngIf="sessionInProgress$ | async"></app-active-session>
