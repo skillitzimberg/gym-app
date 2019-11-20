@@ -1,7 +1,9 @@
 import { Component, OnInit, Injectable, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Subscription, Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
+import * as fromRoot from '../../app.reducer';
 
 import { ExerciseService } from '../../services/exercise.service';
 import { Exercise } from '../../models/exercise.model';
@@ -17,18 +19,20 @@ export class NewSessionComponent implements OnInit, OnDestroy {
   exercises: Exercise[];
   private exerciseSubscription: Subscription;
 
-  isLoading: boolean = true;
+  isLoading$: Observable<boolean>;
   private loadingSubscription: Subscription;
 
   constructor(
     private exerciseService: ExerciseService,
-    private uiService: UIService
+    private uiService: UIService,
+    private store: Store<fromRoot.State>
   ) { };
 
   ngOnInit() {
-    this.loadingSubscription = this.uiService.loadingStateChanged.subscribe(
-      isLoading => this.isLoading = isLoading
-    );
+    this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+    // this.loadingSubscription = this.uiService.loadingStateChanged.subscribe(
+    //   isLoading => this.isLoading$ = isLoading
+    // );
     this.fetchExercises();
     this.exerciseSubscription = this.exerciseService.exerciseRepoChanged.subscribe(exercises => {
       this.exercises = exercises;

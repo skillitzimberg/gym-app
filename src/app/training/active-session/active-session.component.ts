@@ -9,12 +9,15 @@ import { ExerciseService } from '../../services/exercise.service';
   styleUrls: ['./active-session.component.css']
 })
 export class ActiveSessionComponent implements OnInit {
-  inSession: boolean = false;
+  // inSession: boolean = false;
   sessionProgress: number = 0;
   displayProgress: number;
   timer: any;
   @Output() exitSession = new EventEmitter();
-  constructor(private dialog: MatDialog, private exerciseService: ExerciseService) { }
+  constructor(
+    private dialog: MatDialog, 
+    private exerciseService: ExerciseService
+  ) { }
   
   ngOnInit() {
     this.startOrResumeSession();

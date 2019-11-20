@@ -44,9 +44,7 @@ import { reducers } from './app.reducer';
     BrowserAnimationsModule,
     RouterModule,
     SharedModule,
-    StoreModule.forRoot({
-      ui: reducers.ui
-    })
+    StoreModule.forRoot(reducers)
   ],
   providers: [
     AuthService, 

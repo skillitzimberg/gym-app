@@ -1,11 +1,11 @@
-import { UIActions, START_LOADING, STOP_LOADING } from './ui.actions';
+import { UIActions, START_LOADING, STOP_LOADING, START_SESSION, STOP_SESSION } from './ui.actions';
 
 export interface State {
-  isLoading: boolean
+  isLoading: boolean,
 }
 
 const initialState: State = {
-  isLoading: false
+  isLoading: false,
 }
 
 export function uiReducer(state: State = initialState, action: UIActions) {

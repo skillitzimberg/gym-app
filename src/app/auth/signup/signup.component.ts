@@ -1,6 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Store } from '@ngrx/store';
+import { Subscription, Observable } from 'rxjs';
+import 'rxjs/add/operator/map';
+import * as fromRoot from '../../app.reducer';
 
 import { AuthService } from '../auth.service';
 import { UIService } from 'src/app/shared/ui.service';
@@ -10,15 +13,17 @@ import { UIService } from 'src/app/shared/ui.service';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.css']
 })
-export class SignupComponent implements OnInit, OnDestroy {
-  isLoading: boolean = false;
+export class SignupComponent implements OnInit {
+  isLoading$: Observable<boolean>;
   loadingSubscription: Subscription;
-  constructor(private authService: AuthService, private uiService: UIService) { }
+  constructor(
+    private authService: AuthService, 
+    private uiService: UIService,
+    private store: Store<fromRoot.State>
+  ) { }
 
   ngOnInit() {
-    this.loadingSubscription = this.uiService.loadingStateChanged.subscribe(isLoading => {
-      this.isLoading = isLoading;
-    })
+    this.isLoading$ = this.store.select(fromRoot.getIsLoading);
   }
 
   onSubmit(form: NgForm): void {
@@ -28,9 +33,9 @@ export class SignupComponent implements OnInit, OnDestroy {
     })
   }
 
-  ngOnDestroy(): void {
-    if(this.loadingSubscription) {
-      this.loadingSubscription.unsubscribe();
-    }
-  }
+  // ngOnDestroy(): void {
+  //   if(this.loadingSubscription) {
+  //     this.loadingSubscription.unsubscribe();
+  //   }
+  // }
 }
