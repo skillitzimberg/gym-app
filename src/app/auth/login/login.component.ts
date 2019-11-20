@@ -5,11 +5,10 @@ import {
   Validators 
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { Subscription, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 
 import { AuthService } from '../auth.service';
-import { UIService } from 'src/app/shared/ui.service';
 import * as fromRoot from '../../app.reducer';
 
 @Component({
@@ -21,18 +20,13 @@ export class LoginComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private uiService: UIService,
     private store: Store<fromRoot.State>
   ) {}
 
   isLoading$: Observable<boolean>;
-  private loadingSubscription: Subscription;
   
   ngOnInit(): void {
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-    // this.loadingSubscription = this.uiService.loadingStateChanged.subscribe(isLoading => {
-    //   this.isLoading = isLoading;
-    // });
   }
 
   loginForm = this.formBuilder.group({
@@ -50,10 +44,4 @@ export class LoginComponent implements OnInit {
       password: this.loginForm.value.password
     })
   }
-
-  // ngOnDestroy(): void {
-  //   if(this.loadingSubscription) {
-  //     this.loadingSubscription.unsubscribe();
-  //   }
-  // }
 }

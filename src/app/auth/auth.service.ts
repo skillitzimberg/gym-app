@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { AuthData } from './auth-data.model';
@@ -9,10 +9,12 @@ import { ExerciseService } from '../services/exercise.service';
 import * as fromRoot from '../app.reducer'
 import * as UI from '../shared/ui.actions';
 import { UIService } from '../shared/ui.service';
+import * as Auth from './auth.actions';
+import { auth } from 'firebase';
 
 @Injectable()
 export class AuthService {
-  private isAuthenticated: boolean = false;
+  private isAuthenticated: boolean;
   
   // Subject<T> extends Observable<T> implements SubscriptionLike
   authChange = new Subject<boolean>();
@@ -28,14 +30,14 @@ export class AuthService {
   initAuthListener() {
     this.afAuth.authState.subscribe(user => {
       if (user) {
-        this.isAuthenticated = true;
+        this.store.dispatch(new Auth.SetAuthenticated());
         this.authChange.next(true);
         this.router.navigate(['/training']);
       } else {
         this.exerciseService.cancelSubscriptions();
         this.authChange.next(false);
         this.router.navigate(['/login']);
-        this.isAuthenticated = false;
+        this.store.dispatch(new Auth.SetUnauthenticated());
       }
     });
   }

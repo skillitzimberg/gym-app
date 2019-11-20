@@ -1,7 +1,7 @@
 import { UIActions, START_LOADING, STOP_LOADING, START_SESSION, STOP_SESSION } from './ui.actions';
 
 export interface State {
-  isLoading: boolean,
+  isLoading: boolean;
 }
 
 const initialState: State = {

@@ -1,5 +1,8 @@
 import { MatDialogModule } from '@angular/material';
 import { NgModule } from '@angular/core';
+import { StoreModule } from '@ngrx/store';
+
+import { trainingReducer } from './training.reducer';
 
 import { SharedModule } from '../shared/shared.module';
 import { TrainingRoutingModule } from './training-routing.module';
@@ -21,6 +24,7 @@ import { TrainingComponent } from './training.component';
   imports: [
     MatDialogModule,
     SharedModule,
+    StoreModule.forFeature('training', trainingReducer),
     TrainingRoutingModule,
   ],
   exports:[],
