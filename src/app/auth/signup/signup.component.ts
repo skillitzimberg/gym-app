@@ -6,7 +6,6 @@ import 'rxjs/add/operator/map';
 import * as fromRoot from '../../app.reducer';
 
 import { AuthService } from '../auth.service';
-import { UIService } from 'src/app/shared/ui.service';
 
 @Component({
   selector: 'app-signup',

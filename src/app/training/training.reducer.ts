@@ -49,12 +49,11 @@ export function trainingReducer(state: TrainingState = initialState, action: Tra
       return {
         ...state,
         currentExercise: action.payload,
-        sessionInProgress: true
       };
       case STOP_SESSION:
       return {
         ...state,
-        sessionInProgress: false
+        currentExercise: null,
       };
     default: {
       return state

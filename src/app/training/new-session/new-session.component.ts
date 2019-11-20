@@ -9,7 +9,6 @@ import * as fromTraining from '../training.reducer';
 import * as Training from '../training.actions';
 import { ExerciseService } from '../../services/exercise.service';
 import { Exercise } from '../../models/exercise.model';
-import { UIService } from 'src/app/shared/ui.service';
 
 @Component({
   selector: 'app-new-session',

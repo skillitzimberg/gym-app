@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 
@@ -13,14 +13,6 @@ import * as fromTraining from '../training/training.reducer';
 
 @Injectable()
 export class ExerciseService {
-  sessionChangeRequested = new Subject<Exercise>();
-  private currentSession: Exercise;
-
-  exerciseRepoChanged = new Subject<Exercise[]>();
-
-  pastSessionRepoChanged = new Subject<Exercise[]>();
-  private pastSessions: Exercise[] = [];
-  
   private fbSubscriptions: Subscription[] = [];
 
   constructor( 
@@ -66,25 +58,13 @@ export class ExerciseService {
     (error: Error) => {
       if(error) {
         this.store.dispatch(new UI.StopLoading());
-        this.uiService.showSnackBar('Exercise service is not able to past sessions.', null, 3000)
+        this.uiService.showSnackBar('Exercise service is not able to load past sessions.', null, 3000)
       }
     }));
   }
 
   startSession(selectedExercise: Exercise) {
     this.store.dispatch(new Training.StartSession(selectedExercise));
-  }
-
-  getcurrentSession() {
-    return { ...this.currentSession };
-  }
-
-  getPastSessions() {
-    return this.pastSessions.slice();
-  }
-
-  private nullCurrentSession() {
-    this.currentSession = null;
   }
 
   completeSession() {
@@ -94,7 +74,7 @@ export class ExerciseService {
         date: new Date(), 
         state: 'completed'
       });
-      this.store.dispatch(new Training.StopSession(ex));
+      this.store.dispatch(new Training.StopSession());
     })
   }
 
@@ -107,7 +87,7 @@ export class ExerciseService {
         calories: ex.calories * (progress / 100), 
         state: 'cancelled'
       });
-      this.store.dispatch(new Training.StopSession(ex));
+      this.store.dispatch(new Training.StopSession());
     })
 
   }

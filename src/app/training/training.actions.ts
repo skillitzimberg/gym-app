@@ -33,8 +33,6 @@ export class StartSession implements Action {
 
 export class StopSession implements Action {
   readonly type = STOP_SESSION;
-  
-  constructor(public payload: Exercise) {};
 }
 
 export type TrainingActions = 

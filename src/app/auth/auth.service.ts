@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 import { Store } from '@ngrx/store';
 
 import { AuthData } from './auth-data.model';
@@ -10,7 +10,6 @@ import * as fromRoot from '../app.reducer'
 import * as UI from '../shared/ui.actions';
 import { UIService } from '../shared/ui.service';
 import * as Auth from './auth.actions';
-import { auth } from 'firebase';
 
 @Injectable()
 export class AuthService {
@@ -43,7 +42,6 @@ export class AuthService {
   }
 
   registerUser(authData: AuthData): void {
-    // this.uiService.loadingStateChanged.next(true);
     this.store.dispatch(new UI.StartLoading());
     this.afAuth.auth.createUserWithEmailAndPassword(
       authData.email,
@@ -51,19 +49,16 @@ export class AuthService {
     )
     .then(result => {
       console.log(result);
-      // this.uiService.loadingStateChanged.next(false);
       this.store.dispatch(new UI.StopLoading());
   })
     .catch(err => {
       console.log(err);
-      // this.uiService.loadingStateChanged.next(false);
       this.store.dispatch(new UI.StopLoading());
       this.uiService.showSnackBar(err.message, null, 3000);
     });
   }
 
   login(authData: AuthData): void {
-    // this.uiService.loadingStateChanged.next(true);
     this.store.dispatch(new UI.StartLoading());
     this.afAuth.auth.signInWithEmailAndPassword(
       authData.email,
@@ -71,12 +66,10 @@ export class AuthService {
     )
     .then(result => {
       console.log(result);
-      // this.uiService.loadingStateChanged.next(false);
       this.store.dispatch(new UI.StopLoading());
   })
     .catch(err => {
       console.log(err);
-      this.uiService.loadingStateChanged.next(false);
       this.store.dispatch(new UI.StopLoading());
       this.uiService.showSnackBar(err.message, null, 3000)
     });

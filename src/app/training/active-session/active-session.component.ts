@@ -6,7 +6,6 @@ import { Store } from '@ngrx/store';
 import { EndSessionComponent } from './end-session.component';
 import { ExerciseService } from '../../services/exercise.service';
 import * as fromTraining from '../training.reducer';
-import * as Training from '../training.actions';
 
 @Component({
   selector: 'app-active-session',
